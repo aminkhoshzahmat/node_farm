@@ -10,15 +10,15 @@
  * arrow function `this` keyword points to it's parent, but normal function has it's own `this`
  */
 
-const fs  = require('fs');
-const http  = require('http');
+const fs = require("fs");
+const http = require("http");
 // const url  = require('url');
 // ====================================================
 // Files
 // Blocking, Synchronous way code execution
 // Synchronous means blocking io
 // // Asynchronous means non-blocking io !=m  callbacks
-// const textIn = fs.readFileSync('./txt/input.txt', 'utf-8'); 
+// const textIn = fs.readFileSync('./txt/input.txt', 'utf-8');
 
 // console.log(textIn);
 
@@ -53,32 +53,75 @@ const http  = require('http');
 // __dirname --> prints the current directory name
 // res.end(value) --> value should be > of type string or an instance of Buffer
 
+const replaceTemplate = (temp, product) => {
+  let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
+  output = output.replace(/{%IMAGE%}/g, product.image);
+  output = output.replace(/{%PRICE%}/g, product.price);
+  output = output.replace(/{%FROM%}/g, product.from);
+  output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
+  output = output.replace(/{%QUANTITY%}/g, product.quantity);
+  output = output.replace(/{%DESCRIPTION%}/g, product.description);
+  output = output.replace(/{%ID%}/g, product.id);
+
+  if (!product.organic)
+    output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic");
+  return output;
+};
+
 // at the first load, block to load all data.
-const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
+// Keep in mind that if there are 100M time request, then `server` section hits 100M time
+const tempOverview = fs.readFileSync(
+  `${__dirname}/templates/template-overview.html`,
+  "utf-8"
+);
+const tempCard = fs.readFileSync(
+  `${__dirname}/templates/template-card.html`,
+  "utf-8"
+);
+const tempProduct = fs.readFileSync(
+  `${__dirname}/templates/template-product.html`,
+  "utf-8"
+);
+
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
+const dataObj = JSON.parse(data);
 // const dataObj = JSON.parse(data);
 
-const server = http.createServer((req, res) => { // Hits every time request send to server
-    const pathName = req.url; // this way we can access to url, but hard to parse qs, here we can use url module to make it easier to use.
-    console.log(pathName);
-    if (pathName === '/' || pathName === '/overview') {
-        res.end('This is the overview')
-    } else if (pathName === '/product') {
-        res.end('This is the product')
-    } else if (pathName === '/api') {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(data)
-    } else {
-        // res.writeHead(404); // set http status code
-        res.writeHead(404, {
-            'Content-Type': 'text/html',
-            'my-own-header': 'hello-world'
-        }); // also send headers
-        res.end('<h1>Page not  found</h1>'); 
-    }
+const server = http.createServer((req, res) => {
+  // Hits every time request send to server
+  const pathName = req.url; // this way we can access to url, but hard to parse qs, here we can use url module to make it easier to use.
+  console.log(pathName);
 
+  //Overview page
+  if (pathName === "/" || pathName === "/overview") {
+    res.writeHead(200, { "Content-Type": "text/html" });
 
+    const cardsHtml = dataObj
+      .map((el) => replaceTemplate(tempCard, el))
+      .join(""); // with join makes it a string.
+    const output = tempOverview.replace("{%PRODUCT_CARDS%}", cardsHtml);
+    console.log(cardsHtml);
+
+    res.end(output);
+
+    // Product page
+  } else if (pathName === "/product") {
+    res.end("This is the product");
+
+    // API
+  } else if (pathName === "/api") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(data);
+  } else {
+    // res.writeHead(404); // set http status code
+    res.writeHead(404, {
+      "Content-Type": "text/html",
+      "my-own-header": "hello-world",
+    }); // also send headers
+    res.end("<h1>Page not  found</h1>");
+  }
 });
 // It goes in event loop, won't give prompt back to you.
-server.listen(8000, 'localhost', () => {
-    console.log('Listening to request on port 8000');
-})
+server.listen(8000, "localhost", () => {
+  console.log("Listening to request on port 8000");
+});
