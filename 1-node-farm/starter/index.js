@@ -13,6 +13,7 @@
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
+const replaceTemplate = require("./modules/replace-template");
 // ====================================================
 // Files
 // Blocking, Synchronous way code execution
@@ -52,21 +53,6 @@ const url = require("url");
 // Note: when we use browser, it requests automatically for `/favicon.co`. test http localhost:8000 and browser.
 // __dirname --> prints the current directory name
 // res.end(value) --> value should be > of type string or an instance of Buffer
-
-const replaceTemplate = (temp, product) => {
-  let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
-  output = output.replace(/{%IMAGE%}/g, product.image);
-  output = output.replace(/{%PRICE%}/g, product.price);
-  output = output.replace(/{%FROM%}/g, product.from);
-  output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
-  output = output.replace(/{%QUANTITY%}/g, product.quantity);
-  output = output.replace(/{%DESCRIPTION%}/g, product.description);
-  output = output.replace(/{%ID%}/g, product.id);
-
-  if (!product.organic)
-    output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic");
-  return output;
-};
 
 // at the first load, block to load all data.
 // Keep in mind that if there are 100M time request, then `server` section hits 100M time
