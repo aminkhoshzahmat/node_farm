@@ -10,12 +10,20 @@
  * arrow function `this` keyword points to it's parent, but normal function has it's own `this`
  * nodemon is just a wrapper around `node index.js` command watching *.*
  * we cannot use local dev dependencies in terminal, we have to access them through the npm scripts
+ * we can omit the `run` keyword when calling `npm <run> <command>` --> npm start
+ * 2 types of packages we can install are simple/regular dependencies OR development dependencies
  */
 
+// Node core modules
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
+
+// Our custom module
 const replaceTemplate = require("./modules/replace-template");
+
+// npm packages
+const slugify = require("slugify");
 // ====================================================
 // Files
 // Blocking, Synchronous way code execution
@@ -73,7 +81,9 @@ const tempProduct = fs.readFileSync(
 
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
 const dataObj = JSON.parse(data);
-// const dataObj = JSON.parse(data);
+
+const slugs = dataObj.map((el) => slugify(el.productName, { lower: true }));
+console.log(slugs);
 
 const server = http.createServer((req, res) => {
   // Hits every time request send to server
