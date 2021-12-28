@@ -8,6 +8,8 @@
  *   This is why we use so many callback functions in Node.js
  * Solution to callback hell: Using promises or Async/Await
  * arrow function `this` keyword points to it's parent, but normal function has it's own `this`
+ * nodemon is just a wrapper around `node index.js` command watching *.*
+ * we cannot use local dev dependencies in terminal, we have to access them through the npm scripts
  */
 
 const fs = require("fs");
