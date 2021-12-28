@@ -12,7 +12,7 @@
 
 const fs = require("fs");
 const http = require("http");
-// const url  = require('url');
+const url = require("url");
 // ====================================================
 // Files
 // Blocking, Synchronous way code execution
@@ -89,27 +89,28 @@ const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
   // Hits every time request send to server
-  const pathName = req.url; // this way we can access to url, but hard to parse qs, here we can use url module to make it easier to use.
-  console.log(pathName);
+  // const pathname = req.url; // this way we can access to url, but hard to parse qs, here we can use url module to make it easier to use.
+  const { query, pathname } = url.parse(req.url, true);
 
   //Overview page
-  if (pathName === "/" || pathName === "/overview") {
+  if (pathname === "/" || pathname === "/overview") {
     res.writeHead(200, { "Content-Type": "text/html" });
 
     const cardsHtml = dataObj
       .map((el) => replaceTemplate(tempCard, el))
       .join(""); // with join makes it a string.
     const output = tempOverview.replace("{%PRODUCT_CARDS%}", cardsHtml);
-    console.log(cardsHtml);
 
     res.end(output);
 
     // Product page
-  } else if (pathName === "/product") {
-    res.end("This is the product");
+  } else if (pathname === "/product") {
+    const product = dataObj[query.id];
+    const output = replaceTemplate(tempProduct, product);
+    res.end(output);
 
     // API
-  } else if (pathName === "/api") {
+  } else if (pathname === "/api") {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(data);
   } else {
