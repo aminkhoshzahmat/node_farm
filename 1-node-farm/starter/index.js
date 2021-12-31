@@ -12,18 +12,28 @@
  * we cannot use local dev dependencies in terminal, we have to access them through the npm scripts
  * we can omit the `run` keyword when calling `npm <run> <command>` --> npm start
  * 2 types of packages we can install are simple/regular dependencies OR development dependencies
+ * npm
+ *    Breaking changes.New features.Bug fixes > Major.Minor.Patch > 1.4.3
+ *    npm outdated > return outdated packages
+ *    install specific version > npm install slugify@1.0.0 > npm outdated
+ *    npm uninstall package name > to remove package from node_modules and
+ *    ~ is safer than ^.
+ *      ~1.0.0 wanted > 1.0.2 --> get only minor changes > npm update returns 1.0.2
+ *      ^1.0.0 wanted > 1.6.3 --> accept minor and patch changes. > npm update returns 1.6.4
+ *      *1.0.0 wanted > 2.3.4 --> Lord! Let's start this Major update.
+ *
  */
-
 // Node core modules
-const fs = require("fs");
-const http = require("http");
-const url = require("url");
+const fs = require('fs');
+const http = require('http');
+const url = require('url');
 
 // Our custom module
-const replaceTemplate = require("./modules/replace-template");
+const replaceTemplate = require('./modules/replace-template');
 
 // npm packages
-const slugify = require("slugify");
+const slugify = require('slugify');
+const { resolve } = require('path');
 // ====================================================
 // Files
 // Blocking, Synchronous way code execution
@@ -68,18 +78,18 @@ const slugify = require("slugify");
 // Keep in mind that if there are 100M time request, then `server` section hits 100M time
 const tempOverview = fs.readFileSync(
   `${__dirname}/templates/template-overview.html`,
-  "utf-8"
+  'utf-8'
 );
 const tempCard = fs.readFileSync(
   `${__dirname}/templates/template-card.html`,
-  "utf-8"
+  'utf-8'
 );
 const tempProduct = fs.readFileSync(
   `${__dirname}/templates/template-product.html`,
-  "utf-8"
+  'utf-8'
 );
 
-const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(data);
 
 const slugs = dataObj.map((el) => slugify(el.productName, { lower: true }));
@@ -91,36 +101,36 @@ const server = http.createServer((req, res) => {
   const { query, pathname } = url.parse(req.url, true);
 
   //Overview page
-  if (pathname === "/" || pathname === "/overview") {
-    res.writeHead(200, { "Content-Type": "text/html" });
+  if (pathname === '/' || pathname === '/overview') {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
 
     const cardsHtml = dataObj
       .map((el) => replaceTemplate(tempCard, el))
-      .join(""); // with join makes it a string.
-    const output = tempOverview.replace("{%PRODUCT_CARDS%}", cardsHtml);
+      .join(''); // with join makes it a string.
+    const output = tempOverview.replace('{%PRODUCT_CARDS%}', cardsHtml);
 
     res.end(output);
 
     // Product page
-  } else if (pathname === "/product") {
+  } else if (pathname === '/product') {
     const product = dataObj[query.id];
     const output = replaceTemplate(tempProduct, product);
     res.end(output);
 
     // API
-  } else if (pathname === "/api") {
-    res.writeHead(200, { "Content-Type": "application/json" });
+  } else if (pathname === '/api') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(data);
   } else {
     // res.writeHead(404); // set http status code
     res.writeHead(404, {
-      "Content-Type": "text/html",
-      "my-own-header": "hello-world",
+      'Content-Type': 'text/html',
+      'my-own-header': 'hello-world',
     }); // also send headers
-    res.end("<h1>Page not  found</h1>");
+    res.end('<h1>Page not  found</h1>');
   }
 });
 // It goes in event loop, won't give prompt back to you.
-server.listen(8000, "localhost", () => {
-  console.log("Listening to request on port 8000");
+server.listen(8000, 'localhost', () => {
+  console.log('Listening to request on port 8000');
 });
