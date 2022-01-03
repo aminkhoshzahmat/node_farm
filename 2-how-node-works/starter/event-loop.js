@@ -51,4 +51,65 @@
  *
  * Tick > one cycle of the event loop
  *
+ * Don't when using nodejs:
+ *  - Don't use sync versions of functions in fs, crypto and zlib modules in your callback functions
+ *  - Don't perform complex calculations (e.g. loops inside loops)
+ *  - Be careful with JSON in large objects
+ *  - Don't use too complex regular expressions (e.g. nested quantifiers)
+ *
+ * Event > keep observing (observable pattern)
  */
+
+const fs = require('fs');
+const crypto = require('crypto');
+
+const start = Date.now();
+process.env.UV_THREADPOOL_SIZE = 5; // Change pool size
+
+// These 3 can execute at the same time (in no particular order), each time they can be first or second.
+// They are not actually in I/O cycle, so it's not running inside of event loop, because it's not running inside of any callback functions.
+// These 3 actually have nothing to do with event loop, because they are not actually running inside of event loop just yet.
+setTimeout(() => console.log('Timer 1 finished'), 0);
+setImmediate(() => console.log('Immediate 1 finished'));
+fs.readFile('test-file.txt', 'utf-8', () => {
+  // this is the last one, just because of time consuming task.
+  console.log('I/O finished');
+  console.log('-------------------(till here nothing was in event loop)');
+
+  setTimeout(() => console.log('Timer 2 finished'), 0);
+  setTimeout(
+    () => console.log('Timer 3 finished - although planned for 3 seconds, but waited for others to complete'),
+    3000
+  );
+  setImmediate(() => console.log('Immediate 2 finished'));
+
+  process.nextTick(() => console.log('Process.nextTick')); // Run Immediately, part of Micro task queue, can run after each phase, not an entire tick
+
+  // Size of the thread pool is 4 by default.
+  // add sync to block the execution process, no longer run in event loop, no longer off loaded to the thread pool
+  crypto.pbkdf2Sync('password', 'salt', 200000, 1024, 'sha512');
+  console.log(Date.now() - start, 'Sync Password encrypted');
+
+  crypto.pbkdf2Sync('password', 'salt', 200000, 1024, 'sha512');
+  console.log(Date.now() - start, 'Sync Password encrypted');
+
+  console.log('------------------- finished sync tasks (blocking entire execution');
+
+  crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
+    console.log(Date.now() - start, 'Password encrypted');
+  });
+  crypto.pbkdf2('password', 'salt', 200000, 1024, 'sha512', () => {
+    console.log(Date.now() - start, 'Password encrypted');
+  });
+  crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
+    console.log(Date.now() - start, 'Password encrypted');
+  });
+  crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
+    console.log(Date.now() - start, 'Password encrypted');
+  });
+  crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
+    console.log(Date.now() - start, 'Password encrypted');
+  });
+});
+
+console.log('Hello from the top-level code');
