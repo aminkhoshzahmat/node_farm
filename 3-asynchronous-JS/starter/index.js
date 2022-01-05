@@ -67,6 +67,7 @@ readFilePro(`${__dirname}/dog.txt`)
  * but we don't have catch for error handling, so we can use try and catch.
  * It helps us to see our code synchronous.
  * It will run in the background.
+ * Async function return promise automatically.
  */
 const getDocPic = async () => {
   try {
@@ -81,9 +82,36 @@ const getDocPic = async () => {
     console.log('Random dog image save to file!');
   } catch (err) {
     console.log(err);
+    throw err; // THIS WILL MARK PROMISE AS REJECTED
   }
+  return '2: READY 🐕';
 };
 
-console.log('1: Will get dog pics!');
-getDocPic();
-console.log('2: Done getting dog pics');
+// console.log('1: Will get dog pics!');
+// console.log(getDocPic()); // JS will offload this to the background, and this line return promise because it's async, and it returns promise.
+// console.log('2: Done getting dog pics');
+
+// Changed to below ----^
+
+// console.log('1: Will get dog pics!');
+// getDocPic()
+//   .then((x) => {
+//     console.log(x);
+//     console.log('3: Done getting dog pics');
+//   })
+//   .catch((err) => {
+//     console.log('Error 🔥');
+//   });
+
+// Another solution changed to below -----^
+
+(async () => {
+  try {
+    console.log('1: Will get dog pics!');
+    const x = await getDocPic();
+    console.log(x);
+    console.log('3: Done getting dog pics');
+  } catch (err) {
+    console.log('Error 🔥');
+  }
+})();
