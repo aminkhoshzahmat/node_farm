@@ -69,23 +69,23 @@ readFilePro(`${__dirname}/dog.txt`)
  * It will run in the background.
  * Async function return promise automatically.
  */
-const getDocPic = async () => {
-  try {
-    // await will stop execution at this point to complete this promise is resolved
-    const data = await readFilePro(`${__dirname}/dog.txt`);
-    console.log(`Breed: ${data}`);
+// const getDocPic = async () => {
+//   try {
+//     // await will stop execution at this point to complete this promise is resolved
+//     const data = await readFilePro(`${__dirname}/dog.txt`);
+//     console.log(`Breed: ${data}`);
 
-    const res = await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
-    console.log(res.body.message);
+//     const res = await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+//     console.log(res.body.message);
 
-    await writeFilePro('dog-img.txt', res.body.message);
-    console.log('Random dog image save to file!');
-  } catch (err) {
-    console.log(err);
-    throw err; // THIS WILL MARK PROMISE AS REJECTED
-  }
-  return '2: READY 🐕';
-};
+//     await writeFilePro('dog-img.txt', res.body.message);
+//     console.log('Random dog image save to file!');
+//   } catch (err) {
+//     console.log(err);
+//     throw err; // THIS WILL MARK PROMISE AS REJECTED
+//   }
+//   return '2: READY 🐕';
+// };
 
 // console.log('1: Will get dog pics!');
 // console.log(getDocPic()); // JS will offload this to the background, and this line return promise because it's async, and it returns promise.
@@ -105,13 +105,44 @@ const getDocPic = async () => {
 
 // Another solution changed to below -----^
 
-(async () => {
+// (async () => {
+//   try {
+//     console.log('1: Will get dog pics!');
+//     const x = await getDocPic();
+//     console.log(x);
+//     console.log('3: Done getting dog pics');
+//   } catch (err) {
+//     console.log('Error 🔥');
+//   }
+// })();
+
+// ==========================================================
+// ==========================================================
+// ==========================================================
+// ==========================================================
+// Waiting for Multiple Promises Simultaneously.
+
+const getDocPic = async () => {
   try {
-    console.log('1: Will get dog pics!');
-    const x = await getDocPic();
-    console.log(x);
-    console.log('3: Done getting dog pics');
+    // await will stop execution at this point to complete this promise is resolved
+    const data = await readFilePro(`${__dirname}/dog.txt`);
+    console.log(`Breed: ${data}`);
+
+    const resPro1 = superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+    const resPro2 = superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+    const resPro3 = superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+
+    const all = await Promise.all([resPro1, resPro2, resPro3]);
+    const imgs = all.map((el) => el.body.message);
+    console.log(imgs);
+
+    await writeFilePro('dog-img.txt', imgs.join('\n'));
+    console.log('Random dog image save to file!');
   } catch (err) {
-    console.log('Error 🔥');
+    console.log(err);
+    throw err; // THIS WILL MARK PROMISE AS REJECTED
   }
-})();
+  return '2: READY 🐕';
+};
+
+console.log(getDocPic(0));
