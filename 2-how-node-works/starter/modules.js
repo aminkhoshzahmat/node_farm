@@ -62,3 +62,4 @@ console.log(add(5, 6));
  */
 require('./test-module-3')();
 require('./test-module-3')();
+require('./test-module-3')();
