@@ -10,6 +10,7 @@
  */
 const express = require('express');
 const fs = require('fs');
+const morgan = require('morgan');
 
 /**
  * Setup Server and Middleware,
@@ -18,7 +19,12 @@ const fs = require('fs');
  */
 const app = express();
 const port = 3000;
+
+/**
+ * Middleware
+ */
 app.use(express.json()); //  To get access to the request body on the request object, This is a middleware stands between request and response.
+app.use(morgan('dev'));
 
 /**
  * - Custom Middleware
@@ -43,7 +49,7 @@ app.use((req, res, next) => {
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`));
 
 /**
- * Route functions
+ * Route Handlers
  */
 const getAllTours = (req, res) => {
   console.log(req.requestTime);
@@ -155,6 +161,9 @@ const deleteTour = (req, res) => {
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 app.route('/api/v1/tours/:id').get(getTour).patch(updateTour).delete(deleteTour);
 
+/**
+ * Start the Server
+ */
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
 });
