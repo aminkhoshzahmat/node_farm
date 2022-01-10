@@ -36,6 +36,23 @@ exports.getAllTours = (req, res) => {
   });
 };
 
+/**
+ * Create a checkBody middleware
+ * Check if body contains the name and price property
+ * If not, send back 400 (bad request)
+ * Add it to the post handler stack
+ */
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Missing name or price',
+    });
+  }
+  // If everything was ok, then we go to the next middleware.
+  next();
+};
+
 exports.createTour = (req, res) => {
   console.log(req.body);
   const newID = tours[tours.length - 1].id - 1;
