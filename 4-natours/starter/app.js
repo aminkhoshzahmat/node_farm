@@ -20,7 +20,6 @@ const userRouter = require('./routes/userRoutes');
  * All the middlewares together that we use in our app, is called MIDDLEWARE STACK
  */
 const app = express();
-const port = 3000;
 
 /**
  * Middleware
@@ -51,9 +50,4 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
-/**
- * Start the Server
- */
-app.listen(port, () => {
-  console.log(`App running on port ${port}`);
-});
+module.exports = app;
