@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
-dotenv.config({ path: './config.env' });
 const app = require('./app');
+
+dotenv.config({ path: './config.env' });
 
 /**
  * This package helps us to define and populate our variables in nodejs.

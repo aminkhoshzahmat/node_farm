@@ -5,6 +5,8 @@
  *
  * Enveloping means, wrapping object ino another object like data.
  *
- * npm i eslint prettier eslint-config-prettier    eslint-plugin-prettier
- *                       let prettier do the job   find errors with prettier
+ * ESLINT is all about coding rules.
+ * https://eslint.org/docs/rules/
+ * files with error will get red.
+ * npm i eslint prettier eslint-config-prettier eslint-plugin-prettier  eslint-config-airbnb eslint-plugin-node eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react --save-dev
  */

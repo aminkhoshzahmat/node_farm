@@ -86,7 +86,7 @@ exports.getTour = (req, res) => {
 };
 
 exports.updateTour = (req, res) => {
-  const tour = tours.find((el) => el.id === id);
+  const tour = tours.find((el) => el.id === req.body.id);
   const duration = req.body.duration;
   const updatedTour = { ...tour, duration };
 
