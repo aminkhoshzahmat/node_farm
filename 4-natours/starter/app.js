@@ -25,8 +25,10 @@ const app = express();
  * Middleware
  */
 app.use(express.json()); //  To get access to the request body on the request object, This is a middleware stands between request and response.
-app.use(morgan('dev'));
 app.use(express.static(`${__dirname}/public`));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 /**
  * - Custom Middleware
