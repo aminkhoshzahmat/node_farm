@@ -55,5 +55,6 @@ app.use('/api/v1/users', userRouter);
 
 module.exports = app;
 
-const x = 44;
-x = 3;
+// test for eslint
+// const x = 44;
+// x = 3;
