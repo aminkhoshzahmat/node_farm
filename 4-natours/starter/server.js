@@ -14,6 +14,10 @@ const DB = process.env.DATABASE_DSN_PROD.replace('<password>', process.env.DATAB
   .replace('<username>', process.env.DATABASE_USERNAME)
   .replace('<database_name>', process.env.DATABASE_NAME);
 
+/**
+ * Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js,
+ * a higher level of abstraction.
+ */
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
