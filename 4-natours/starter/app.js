@@ -9,7 +9,7 @@
  * Require modules
  */
 const express = require('express');
-const morgan = require('morgan');
+const morgan = require('morgan'); // Logger
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
