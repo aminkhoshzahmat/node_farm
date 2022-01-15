@@ -24,6 +24,25 @@ mongoose
   })
   .then(() => console.log(`DB connected successfully to: ${process.env.DATABASE_NAME}`));
 
+const tourSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    require: [true, 'A tour must have a name'],
+    unique: true,
+    // require: true,
+  },
+  rating: {
+    type: Number,
+    default: 4.5,
+  },
+  price: {
+    type: Number,
+    require: [true, 'A tour must have a price'],
+  },
+});
+
+const Tour = mongoose.model('Tour', tourSchema);
+
 /**
  * Default environment is 'development'
  * custom env variable in command
