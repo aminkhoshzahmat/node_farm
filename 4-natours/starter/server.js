@@ -18,8 +18,9 @@ const DB = process.env.DATABASE_DSN_PROD.replace('<password>', process.env.DATAB
  * Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js,
  * a higher level of abstraction.
  */
+
 mongoose
-  .connect(DB, {
+  .connect(process.env.DATABASE_DSN_LOCAL, {
     useNewUrlParser: true,
   })
   .then(() => console.log(`DB connected successfully to: ${process.env.DATABASE_NAME}`));
@@ -27,7 +28,7 @@ mongoose
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: [true, 'A tour must have a name'],
+    required: [true, 'A tour must have a name'],
     unique: true,
     // require: true,
   },
@@ -37,11 +38,25 @@ const tourSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    require: [true, 'A tour must have a price'],
+    required: [true, 'A tour must have a price'],
   },
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
+
+const testTour = new Tour({
+  name: 'The Park Camper',
+  price: 997,
+});
+
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 /**
  * Default environment is 'development'
