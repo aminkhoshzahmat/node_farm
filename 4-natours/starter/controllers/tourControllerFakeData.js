@@ -1,8 +1,9 @@
-const Tour = require('../models/tourModel');
+const fs = require('fs');
+
 /**
  * DATA: for testing purpose
  */
-// const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`));
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`));
 
 /**
  * Validation

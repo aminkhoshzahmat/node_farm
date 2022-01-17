@@ -5,7 +5,7 @@ const router = express.Router();
 /**
  * We can also use destructure pattern to use their exact name like > {createTour, getTour,...}
  */
-const tourController = require('../controllers/tourController');
+const tourController = require('../controllers/tourControllerFakeData');
 
 /**
  * Param middleware listen to params, for example here we are listening for id in tour routes.
@@ -16,7 +16,7 @@ const tourController = require('../controllers/tourController');
  *   next();
  * });
  */
-// router.param('id', tourController.checkID);
+router.param('id', tourController.checkID);
 
 router.route('/').get(tourController.getAllTours).post(tourController.checkBody, tourController.createTour);
 router.route('/:id').get(tourController.getTour).patch(tourController.updateTour).delete(tourController.deleteTour);
