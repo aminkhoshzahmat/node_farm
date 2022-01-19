@@ -36,41 +36,34 @@ exports.getAllTours = (req, res) => {
 };
 
 /**
- * Create a checkBody middleware
- * Check if body contains the name and price property
- * If not, send back 400 (bad request)
- * Add it to the post handler stack
+ * Async & Await video 88 > 04:00
+ * instead of `Tour.create({}).then` which returns a promise,
+ * we can put async at the beginning of the function and put await behind the `await Tour.create({})`
+ * NOTE:
+ * - To catch errors for async/await we should use try & catch
+ * - Everything in req.body that is not related to our schema (tour) will not save and will ignored.
+ * - Validation works behind the scene because of our schema
+ *
  */
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Missing name or price',
-    });
-  }
-  // If everything was ok, then we go to the next middleware.
-  next();
-};
+exports.createTour = async (req, res) => {
+  try {
+    // const newTour = new Tour({});
+    // newTour.save(); // an easier way is create() method
 
-exports.createTour = (req, res) => {
-  console.log(req.body);
-  const newID = tours[tours.length - 1].id - 1;
-  const newTour = Object.assign({ id: newID }, req.body);
-  tours.push(newTour);
-  /**
-   * - Because we are in callback function, that is going to run in the event loop,
-   * so we can never ever block the event loop, so we use writeFile, not writeFileSync.
-   * - So we want to pass a callback function that is going to be processed in the background and
-   * as soon as it's ready it's going put its event in one of the event loop queue which is going to be handled as soon as event loop passes that phase.
-   */
-  fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), (err) => {
+    const newTour = await Tour.create(req.body);
+
     res.status(201).json({
       status: 'success',
       date: {
         tour: newTour,
       },
     });
-  });
+  } catch (err) {
+    res.status(400).json({
+      status: 'failed',
+      message: 'Invalid data sent',
+    });
+  }
 };
 
 exports.getTour = (req, res) => {
