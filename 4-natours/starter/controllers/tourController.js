@@ -94,17 +94,28 @@ exports.getTour = async (req, res) => {
   }
 };
 
+/**
+ * With {new: true} > we return the updated document
+ */
 exports.updateTour = (req, res) => {
-  const tour = tours.find((el) => el.id === req.body.id);
-  const duration = req.body.duration;
-  const updatedTour = { ...tour, duration };
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: 'tour data',
-    },
-  });
+  try {
+    const tour = Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(201).json({
+      status: 'success',
+      date: {
+        tour,
+        // tour: tour, // Thanks to ES6 > short string is enough
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 
 exports.deleteTour = (req, res) => {
