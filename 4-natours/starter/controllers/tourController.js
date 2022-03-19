@@ -97,11 +97,11 @@ exports.getTour = async (req, res) => {
 /**
  * With {new: true} > we return the updated document
  */
-exports.updateTour = (req, res) => {
+exports.updateTour = async (req, res) => {
   try {
-    const tour = Tour.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // Return the modified document rather than the original.
+      runValidators: true, // Mongoose also supports validation for update(), updateOne(), updateMany(), and findOneAndUpdate()
     });
     res.status(201).json({
       status: 'success',
@@ -118,20 +118,23 @@ exports.updateTour = (req, res) => {
   }
 };
 
-exports.deleteTour = (req, res) => {
-  // const tour = tours.find((el) => el.id === id);
-  // const duration = req.body.duration;
-  // const updatedTour = { ...tour, duration };
-
-  /**
-   * 204 returns nothing
-   */
-  res.status(204).json({
-    status: 'success',
-    data: {
-      tour: { name: 'amin' },
-    },
-  });
+/**
+ * 204 returns nothing
+ */
+exports.deleteTour = async (req, res) => {
+  try {
+    // In RESTful API, it's a common practice not to send back any data.
+    await Tour.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    });
+  } catch (err) {
+    res.status(401).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 
 // NOTE: Instead of adding all these functions one by one, we can use 'exports.function name' behind each function
