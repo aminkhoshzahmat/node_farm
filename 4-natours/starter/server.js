@@ -1,11 +1,12 @@
 const mongoose = require('mongoose'); // Mongo
 const dotenv = require('dotenv');
-const app = require('./app');
 
 /**
  * This package helps us to define and populate our variables in nodejs.
  */
 dotenv.config({ path: './config.env' });
+
+const app = require('./app');
 
 /**
  * Mongoose

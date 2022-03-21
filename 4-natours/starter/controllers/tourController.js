@@ -24,7 +24,35 @@ exports.checkID = (req, res, next, val) => {
  */
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    console.log(req.query); // Thanks to express!
+    // const tours = await Tour.find(req.query); // parameters and args are exactly fit.
+    // const tours = await Tour.find(); // find all
+    // const tours = await Tour.find({ // how to filter with mongoose
+    //   duration: 5,
+    //   difficulty: 'easy'
+    // });
+    // const tours = await Tour.find().where('duration').equals(5).where('difficulty').equals('easy');
+
+    // 1) Filtering
+    const queryObj = { ...req.query }; // shallow copy
+    const excludeFields = ['page', 'sort', 'limit', 'fields'];
+    excludeFields.forEach((el) => delete queryObj[el]);
+
+    // 2) Advanced Filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    queryStr = JSON.parse(queryStr);
+
+    // Create and Execute the query
+    const query = Tour.find(queryStr); // create query
+    // const query = Tour.find(queryObj); // create query
+    const tours = await query; // execute the query
+
+    // localhost:3000/api/v1/tours?duration[gte]=5&difficulty=easy&page=1
+    // { duration: { gte: '5' }, difficulty: 'easy', page: '1' }
+    // { difficulty: 'easy', duration: {$gte: 5} }
+
+    // console.log(req.query, queryObj);
     res.status(200).json({
       status: 'success',
       results: tours.length, // It's not in JSend specification, but helps when we are dealing with arrays
