@@ -33,18 +33,28 @@ exports.getAllTours = async (req, res) => {
     // });
     // const tours = await Tour.find().where('duration').equals(5).where('difficulty').equals('easy');
 
-    // 1) Filtering
+    // 1A) Filtering
     const queryObj = { ...req.query }; // shallow copy
     const excludeFields = ['page', 'sort', 'limit', 'fields'];
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    // 2) Advanced Filtering
+    // 1B) Advanced Filtering
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
     queryStr = JSON.parse(queryStr);
 
-    // Create and Execute the query
-    const query = Tour.find(queryStr); // create query
+    // Create the query
+    let query = Tour.find(queryStr); // create query
+
+    // 2) Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy); // sort=price | sort=-price
+    } else {
+      query = query.sort('-createdAt');
+    }
+
+    // Execute the query
     // const query = Tour.find(queryObj); // create query
     const tours = await query; // execute the query
 
