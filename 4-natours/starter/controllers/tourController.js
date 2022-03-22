@@ -40,7 +40,7 @@ exports.getAllTours = async (req, res) => {
 
     // 1B) Advanced Filtering
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
     queryStr = JSON.parse(queryStr);
 
     // Create the query
@@ -63,9 +63,20 @@ exports.getAllTours = async (req, res) => {
       query = query.select('-__v');
     }
 
+    // 4) Pagination
+    const page = req.query.page * 1 || 1; // * 1 convert to ing, | default value
+    const limit = req.query.limit * 1 || 100; // perPage
+    const skip = (page - 1) * limit; // limit
+    query = query.skip(skip).limit(limit);
+    if (req.query.page) {
+      const numTours = Tour.countDocuments(); // return total records
+      if (skip >= numTours) throw new Error("This page doesn't exists"); // show in > res.status(404).json
+    }
+
     // Execute the query
     // const query = Tour.find(queryObj); // create query
     const tours = await query; // execute the query
+    // query.sort().select().skip().limit()
 
     // localhost:3000/api/v1/tours?duration[gte]=5&difficulty=easy&page=1
     // { duration: { gte: '5' }, difficulty: 'easy', page: '1' }
