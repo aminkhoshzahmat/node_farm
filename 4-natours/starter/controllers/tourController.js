@@ -1,4 +1,5 @@
 const Tour = require('../models/tourModel');
+const APIFeatures = require('../utils/apiFeatures');
 /**
  * DATA: for testing purpose
  */
@@ -34,66 +35,11 @@ exports.aliasTopTours = (req, res, next) => {
  */
 exports.getAllTours = async (req, res) => {
   try {
-    console.log(req.query); // Thanks to express!
-    // const tours = await Tour.find(req.query); // parameters and args are exactly fit.
-    // const tours = await Tour.find(); // find all
-    // const tours = await Tour.find({ // how to filter with mongoose
-    //   duration: 5,
-    //   difficulty: 'easy'
-    // });
-    // const tours = await Tour.find().where('duration').equals(5).where('difficulty').equals('easy');
-
-    // 1A) Filtering
-    const queryObj = { ...req.query }; // shallow copy
-    const excludeFields = ['page', 'sort', 'limit', 'fields'];
-    excludeFields.forEach((el) => delete queryObj[el]);
-
-    // 1B) Advanced Filtering
-    let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    queryStr = JSON.parse(queryStr);
-
     // Create the query
-    let query = Tour.find(queryStr); // create query
-
-    // 2) Sorting
-    // top-5-cheap --> ?limit=5&sort=-ratingsAverage,price
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      query = query.sort(sortBy); // sort=price | sort=-price
-    } else {
-      query = query.sort('-createdAt');
-    }
-
-    // 3) Field limiting
-    // We can deselect permanently in schema > select: false
-    if (req.query.fields) {
-      const fields = req.query.fields.split(',').join(' ');
-      query = query.select(fields);
-    } else {
-      query = query.select('-__v');
-    }
-
-    // 4) Pagination
-    const page = req.query.page * 1 || 1; // * 1 convert to ing, | default value
-    const limit = req.query.limit * 1 || 100; // perPage
-    const skip = (page - 1) * limit; // limit
-    query = query.skip(skip).limit(limit);
-    if (req.query.page) {
-      const numTours = Tour.countDocuments(); // return total records
-      if (skip >= numTours) throw new Error("This page doesn't exists"); // show in > res.status(404).json
-    }
-
+    const features = new APIFeatures(Tour.find(), req.query).filter().sort().limitFields().paginate();
     // Execute the query
-    // const query = Tour.find(queryObj); // create query
-    const tours = await query; // execute the query
-    // query.sort().select().skip().limit()
+    const tours = await features.query; // execute the query
 
-    // localhost:3000/api/v1/tours?duration[gte]=5&difficulty=easy&page=1
-    // { duration: { gte: '5' }, difficulty: 'easy', page: '1' }
-    // { difficulty: 'easy', duration: {$gte: 5} }
-
-    // console.log(req.query, queryObj);
     res.status(200).json({
       status: 'success',
       results: tours.length, // It's not in JSend specification, but helps when we are dealing with arrays
