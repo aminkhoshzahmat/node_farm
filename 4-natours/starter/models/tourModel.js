@@ -5,19 +5,19 @@ const tourSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A tour must have a name'],
     unique: true,
-    trim: true
+    trim: true,
   },
   duration: {
     type: Number,
-    required: [true, 'A tour must have a duration']
+    required: [true, 'A tour must have a duration'],
   },
   maxGroupSize: {
     type: Number,
-    required: [true, 'A group must have a group size']
+    required: [true, 'A group must have a group size'],
   },
   difficulty: {
     type: String,
-    required: [true, 'A tour must have a difficulty']
+    required: [true, 'A tour must have a difficulty'],
   },
   ratingAverage: {
     type: Number,
@@ -49,6 +49,7 @@ const tourSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(), // automatically created in creation, no need to send data, gives us timestamp in milliseconds
+    select: false,
   },
   startDates: [Date], // Mongo would automatically convert this string "2021-09-12" as a date
 });

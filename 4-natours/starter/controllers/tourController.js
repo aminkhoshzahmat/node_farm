@@ -54,6 +54,15 @@ exports.getAllTours = async (req, res) => {
       query = query.sort('-createdAt');
     }
 
+    // 3) Field limiting
+    // We can deselect permanently in schema > select: false
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v');
+    }
+
     // Execute the query
     // const query = Tour.find(queryObj); // create query
     const tours = await query; // execute the query
