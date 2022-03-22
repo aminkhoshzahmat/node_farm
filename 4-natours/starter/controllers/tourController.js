@@ -20,6 +20,16 @@ exports.checkID = (req, res, next, val) => {
 };
 
 /**
+ * Middleware for aliasing
+ */
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingAverage,price';
+  req.query.fields = 'name,price,ratingAverage,summary,difficulty';
+  next();
+};
+
+/**
  * Route Handlers
  */
 exports.getAllTours = async (req, res) => {
@@ -47,6 +57,7 @@ exports.getAllTours = async (req, res) => {
     let query = Tour.find(queryStr); // create query
 
     // 2) Sorting
+    // top-5-cheap --> ?limit=5&sort=-ratingsAverage,price
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
       query = query.sort(sortBy); // sort=price | sort=-price
