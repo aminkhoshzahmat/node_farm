@@ -54,6 +54,10 @@ const tourSchema = new mongoose.Schema(
       select: false,
     },
     startDates: [Date], // Mongo would automatically convert this string "2021-09-12" as a date
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: { virtuals: true }, // when get output as json
@@ -74,8 +78,7 @@ tourSchema.virtual('durationWeeks').get(function () {
 });
 
 /**
- * Document middleware: lifecycles
- * Note: `this` refers to the object before save.
+ * DOCUMENT MIDDLEWARE: point to the object before save.
  * Note: AS this is a middleware, we have access to next, so we should call it.
  * NOTE: runs before .save() and .create() (not insertMany...)
  */
@@ -86,11 +89,38 @@ tourSchema.pre('save', function (next) {
 });
 
 /**
+ * DOCUMENT MIDDLEWARE
  * In post middleware, we don't have access to the `this` anymore, but we have
- * the document saved.
+ * the saved document.
  */
 tourSchema.post('save', function (doc, next) {
   // console.log(doc);
+  next();
+});
+
+/**
+ * QUERY MIDDLEWARE
+ * Point to the current query, not current document.
+ * Everywhere we use find method, it will hook to it, and add this query.
+ * Note: but if you use findOne(or findById) it will fetch it, so with regex we can handle that.
+ *  findOneAndDelete, findOneAndUpdate
+ */
+// tourSchema.pre('find', function (next) {
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
+
+  this.start = Date.now(); // custom field we added.
+  next();
+});
+
+/**
+ * QUERY MIDDLEWARE
+ * Run after the query executed.
+ * We have access to document returned from the query.
+ */
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+  console.log(docs);
   next();
 });
 
