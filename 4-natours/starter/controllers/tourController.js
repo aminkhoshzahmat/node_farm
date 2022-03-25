@@ -112,6 +112,7 @@ exports.getTour = async (req, res) => {
 
 /**
  * With {new: true} > we return the updated document
+ * Note: runValidators > Can check like maxlength,... (Validations)
  */
 exports.updateTour = async (req, res) => {
   try {
