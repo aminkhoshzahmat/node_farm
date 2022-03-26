@@ -54,14 +54,37 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
+
+
 /**
  * If you reach this line of code, it means no route found.
  * All methods.
+ * NOTE: If we don't call the next, app will stop here, but if we call it with error,
+ * we will move to next middleware but the one which is for error handling, HOW?
+ * express will look only for the error handling middleware, and not pass to other middleware in between.
  */
 app.all('*', (req, res, next) => {
-  res.status(400).json({
-    status: 'fail',
-    message: `Can't fine ${req.originalUrl} on this server.`,
+  // res.status(400).json({
+  //   status: 'fail',
+  //   message: `Can't fine ${req.originalUrl} on this server.`,
+  // });
+  const err = new Error(`Can't find ${req.originalUrl} on this server.`);
+  err.status = 'fail';
+  err.statusCode = 404;
+  next(err); // Jump to the error handling middleware, not any middleware in between.
+});
+
+/**
+ * NOTE: Middleware with 4 arguments, express automatically recognise it as
+ * error handling middleware. Therefor it will call it, when there is an error.
+ * error first argument.
+ */
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || 'error';
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
   });
 });
 
