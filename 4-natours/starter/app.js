@@ -36,10 +36,10 @@ if (process.env.NODE_ENV === 'development') {
  * - The priority of middlewares are important, they can run step by step after each other. (e.g. put it after routes.)
  *   because middleware cycle will finish.
  */
-app.use((req, res, next) => {
-  console.log('hello from middleware');
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log('hello from middleware');
+//   next();
+// });
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -49,9 +49,21 @@ app.use((req, res, next) => {
 
 /**
  * Mounting routers
+ * The order of the routes matters.
  */
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+
+/**
+ * If you reach this line of code, it means no route found.
+ * All methods.
+ */
+app.all('*', (req, res, next) => {
+  res.status(400).json({
+    status: 'fail',
+    message: `Can't fine ${req.originalUrl} on this server.`,
+  });
+});
 
 module.exports = app;
 
