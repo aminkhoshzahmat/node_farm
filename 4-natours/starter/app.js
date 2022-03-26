@@ -11,6 +11,8 @@
 const express = require('express');
 const morgan = require('morgan'); // Logger
 
+const AppError = require('./utils/appError');
+const globalErrorHanlder = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
@@ -54,8 +56,6 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
-
-
 /**
  * If you reach this line of code, it means no route found.
  * All methods.
@@ -68,25 +68,22 @@ app.all('*', (req, res, next) => {
   //   status: 'fail',
   //   message: `Can't fine ${req.originalUrl} on this server.`,
   // });
-  const err = new Error(`Can't find ${req.originalUrl} on this server.`);
-  err.status = 'fail';
-  err.statusCode = 404;
-  next(err); // Jump to the error handling middleware, not any middleware in between.
+  // ====================================
+  // const err = new Error(`Can't find ${req.originalUrl} on this server.`);
+  // err.status = 'fail';
+  // err.statusCode = 404;
+  // next(err); // Jump to the error handling middleware, not any middleware in between.
+  // ====================================
+  next(new AppError(`Can't fine ${req.originalUrl} on this server.`, 404));
 });
 
 /**
+ * GLOBAL ERROR HANDLING MIDDLEWARE
  * NOTE: Middleware with 4 arguments, express automatically recognise it as
  * error handling middleware. Therefor it will call it, when there is an error.
  * error first argument.
  */
-app.use((err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'error';
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
-  });
-});
+app.use(globalErrorHanlder);
 
 module.exports = app;
 
