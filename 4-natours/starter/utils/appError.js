@@ -23,3 +23,14 @@ class AppError extends Error {
 }
 
 module.exports = AppError;
+
+// res.status(400).json({
+//   status: 'fail',
+//   message: `Can't fine ${req.originalUrl} on this server.`,
+// });
+// ====================================
+// const err = new Error(`Can't find ${req.originalUrl} on this server.`);
+// err.status = 'fail';
+// err.statusCode = 404;
+// next(err); // Jump to the error handling middleware, not any middleware in between.
+// ====================================

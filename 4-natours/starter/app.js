@@ -64,24 +64,11 @@ app.use('/api/v1/users', userRouter);
  * express will look only for the error handling middleware, and not pass to other middleware in between.
  */
 app.all('*', (req, res, next) => {
-  // res.status(400).json({
-  //   status: 'fail',
-  //   message: `Can't fine ${req.originalUrl} on this server.`,
-  // });
-  // ====================================
-  // const err = new Error(`Can't find ${req.originalUrl} on this server.`);
-  // err.status = 'fail';
-  // err.statusCode = 404;
-  // next(err); // Jump to the error handling middleware, not any middleware in between.
-  // ====================================
   next(new AppError(`Can't fine ${req.originalUrl} on this server.`, 404));
 });
 
 /**
- * GLOBAL ERROR HANDLING MIDDLEWARE
- * NOTE: Middleware with 4 arguments, express automatically recognise it as
- * error handling middleware. Therefor it will call it, when there is an error.
- * error first argument.
+ * GLOBAL ERROR HANDLING MIDDLEWARE (4 arguments)
  */
 app.use(globalErrorHanlder);
 
