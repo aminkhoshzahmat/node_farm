@@ -1,5 +1,5 @@
 /**
- * Operational error handler (14.png)
+ * Operational error handler (14.png) > like no route found, input invalid data, ...
  * extends built-in error class.
  * just es6 class.
  * when we extend a parent class, we call super() in order to
