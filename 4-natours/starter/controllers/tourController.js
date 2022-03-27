@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
+const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 /**
  * DATA: for testing purpose
@@ -78,6 +79,12 @@ exports.createTour = catchAsync(async (req, res, next) => {
 exports.getTour = catchAsync(async (req, res, next) => {
   // Tour.findOne({_id: req.params.id})
   const tour = await Tour.findById(req.params.id); // a shorter way of findOne
+
+  // stop immediately, and jump straight forward to global error handler middleware (4 args)
+  if (!tour) {
+    return next(new AppError('No tour found with that ID', 404));
+  }
+
   res.status(200).json({
     status: 'success',
     date: {
@@ -95,6 +102,11 @@ exports.updateTour = catchAsync(async (req, res, next) => {
     new: true, // Return the modified document rather than the original.
     runValidators: true, // Mongoose also supports validation for update(), updateOne(), updateMany(), and findOneAndUpdate()
   });
+
+  if (!tour) {
+    return next(new AppError('No tour found with that ID', 404));
+  }
+
   res.status(201).json({
     status: 'success',
     date: {
@@ -109,7 +121,12 @@ exports.updateTour = catchAsync(async (req, res, next) => {
  */
 exports.deleteTour = catchAsync(async (req, res, next) => {
   // In RESTful API, it's a common practice not to send back any data.
-  await Tour.findByIdAndDelete(req.params.id);
+  const tour = await Tour.findByIdAndDelete(req.params.id);
+
+  if (!tour) {
+    return next(new AppError('No tour found with that ID', 404));
+  }
+
   res.status(204).json({
     status: 'success',
     data: null,
