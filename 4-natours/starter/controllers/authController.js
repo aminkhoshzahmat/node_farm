@@ -10,13 +10,14 @@ const signToken = (id) =>
   });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const { name, email, password, passwordConfirm, passwordChangedAt } = req.body;
+  const { name, email, password, passwordConfirm, passwordChangedAt, role } = req.body;
   const newUser = await User.create({
-    name: name,
-    email: email,
-    password: password,
-    passwordConfirm: passwordConfirm,
-    passwordChangedAt: passwordChangedAt,
+    name,
+    email,
+    password,
+    passwordConfirm,
+    passwordChangedAt,
+    role,
   });
 
   const token = signToken(newUser._id);
@@ -55,7 +56,7 @@ exports.login = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.protect = catchAsync(async (req, res, next) => {
+exports.protectAuth = catchAsync(async (req, res, next) => {
   // 1) check if token exists
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -94,3 +95,19 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = freshUser;
   next();
 });
+
+/**
+ * Passing values to middleware functions (a function which returns a middleware function)
+ *  first we have to create middleware then return it
+ *  second, because it's a closure inside the middleware we have access to the roles.
+ * NOTE: we have access to the freshUser object thanks to the protectAuth middleware
+ */
+exports.restrictTo =
+  (...roles) =>
+  (req, res, next) => {
+    // roles ['amin', 'lead-guide'] role=user
+    if (!roles.includes(req.user.role)) {
+      return next(new AppError('You do not have permission to perform this action', 403));
+    }
+    next();
+  };
