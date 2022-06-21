@@ -42,10 +42,10 @@ if (process.env.NODE_ENV === 'development') {
 //   console.log('hello from middleware');
 //   next();
 // });
-
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   req.zart = new Date().toISOString();
+  // console.log(req.headers);
   next();
 });
 

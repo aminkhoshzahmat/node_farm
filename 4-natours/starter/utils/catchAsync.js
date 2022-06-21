@@ -4,6 +4,8 @@
  * then return it.
  * (err) => next(err) ===> simplified to ===> next, because JS give the `err` output to the next input.
  * because async returns a promise, then with catch we can get the errors. (.catch)
+ *
+ * use case: not to write try and catch block in each async method
  */
 module.exports = (fn) => {
   return (req, res, next) => {
