@@ -1,0 +1,59 @@
+[
+  {
+    "_id": "8614c1fc-fd0e-48d4-857f-e41d68197cdd",
+    "colId": "history",
+    "containerId": "",
+    "name": "{{URL}}/api/v1/users/forgot-password",
+    "url": "{{URL}}/api/v1/users/forgot-password",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-06-22T18:34:08.447Z",
+    "modified": "2022-06-22T20:15:14.840Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"email\": \"user@gmail.com\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "6f4fd9e3-4f07-4e61-a41a-9af3590e546a",
+    "colId": "history",
+    "containerId": "",
+    "name": "{{URL}}/api/v1/users/login",
+    "url": "{{URL}}/api/v1/users/login",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-06-22T18:39:04.049Z",
+    "modified": "2022-06-22T18:39:20.312Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"email\" : \"user@gmail.com\",\n    \"password\": \"pass1234\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "704d9122-fcbd-4fe4-8dc5-8d6efcb7eab1",
+    "colId": "history",
+    "containerId": "",
+    "name": "localhost:3000/api/v1/users/signup",
+    "url": "localhost:3000/api/v1/users/signup",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-06-22T18:39:08.772Z",
+    "modified": "2022-06-22T18:39:08.908Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\": \"Amin Khoshzahmat\",\n  \"email\": \"user@gmail.com\",\n  \"password\": \"pass1234\",\n  \"passwordConfirm\": \"pass1234\",\n  \"role\": \"user\"\n}",
+      "form": []
+    },
+    "tests": []
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "5df97c01-5cdd-4c61-8cfc-26b3d4b89de3",
+    "name": "Natours.dev",
+    "default": true,
+    "sortNum": 10000,
+    "created": "2022-06-22T18:32:46.054Z",
+    "modified": "2022-06-22T18:32:46.055Z",
+    "data": [
+      {
+        "name": "URL",
+        "value": "localhost:3000"
+      },
+      {
+        "name": "TOKEN",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjFmOTBjODQ1Mjc1M2QzYzgxZDM1NCIsImlhdCI6MTY1NTgzMDc5NiwiZXhwIjoxNjU1OTE2Nzk2fQ.Vnc1LKsAZLafujpfT8DOQZTlT6nYSIgJO4xWH_oCX6M"
+      }
+    ]
+  }
+]

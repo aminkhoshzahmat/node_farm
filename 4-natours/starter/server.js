@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 /**
  * This package helps us to define and populate our variables in nodejs.
  */
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: './.env' });
 
 /**
  * Catching uncaught exception

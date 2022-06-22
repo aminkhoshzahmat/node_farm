@@ -1,0 +1,259 @@
+[
+  {
+    "_id": "7fd91afb-cf1f-4cd2-889e-0503a38e17ee",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "3cfc17dc-ee40-4c80-b495-0964403636fc",
+    "name": "Get All Users",
+    "url": "{{URL}}/api/v1/users",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-06-22T18:31:53.177Z",
+    "modified": "2022-06-22T18:31:53.177Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "5c499e23-56f7-4c2e-9c33-d69261d399bf",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "3cfc17dc-ee40-4c80-b495-0964403636fc",
+    "name": "Get User",
+    "url": "{{URL}}/api/v1/users/5",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2022-06-22T18:31:53.178Z",
+    "modified": "2022-06-22T18:31:53.178Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "0ff0c916-388e-49e8-bb0c-3f9666974f17",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "72cef821-d4cc-4e20-9220-6653794a3c16",
+    "name": "Get All Tours",
+    "url": "{{URL}}/api/v1/tours?limit=5&sort=-ratingsAverage,price&fields=name,duration",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2022-06-22T18:31:53.179Z",
+    "modified": "2022-06-22T18:31:53.179Z",
+    "headers": [
+      {
+        "name": "Authorization",
+        "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjBiYjZlZDZlZDU1YTVlZjQ3YmM0YiIsImlhdCI6MTY1NTc0OTQ4NiwiZXhwIjoxNjU1ODM1NDg2fQ.ot4BytiDL9EJE2DnJNjMv0SpbRY4s7WmOrZVI3T8qNw",
+        "isDisabled": true
+      }
+    ],
+    "params": [
+      {
+        "name": "limit",
+        "value": "5",
+        "isPath": false
+      },
+      {
+        "name": "sort",
+        "value": "-ratingsAverage,price",
+        "isPath": false
+      },
+      {
+        "name": "fields",
+        "value": "name,duration",
+        "isPath": false
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "ac7886ac-abbf-4d9b-b4b2-0a014096420e",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "72cef821-d4cc-4e20-9220-6653794a3c16",
+    "name": "Create New Tour",
+    "url": "{{URL}}/api/v1/tours",
+    "method": "POST",
+    "sortNum": 40000,
+    "created": "2022-06-22T18:31:53.180Z",
+    "modified": "2022-06-22T18:31:53.180Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n      \"name\": \"Amin Tour is the best one\",\n      \"duration\": 7,\n      \"maxGroupSize\": 15,\n      \"difficulty\": \"medium\",\n      \"ratingAverage\": 4.8,\n      \"ratingQuantity\": 23,\n      \"price\": 497,\n      \"priceDiscount\": 470,\n      \"summary\": \"Exploring the jaw-dropping US east coast by foot and by boat\",\n      \"description\": \"Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\nIrure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\",\n      \"imageCover\": \"tour-2-cover.jpg\",\n      \"images\": [\"tour-2-1.jpg\", \"tour-2-2.jpg\", \"tour-2-3.jpg\"],\n      \"startDates\": [\"2021-06-19,10:00\", \"2021-07-20,10:00\", \"2021-08-18,10:00\"],\n      \"secretTour\": true\n    }",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "4d8ab896-4764-4537-9e6d-0b634c9f3e05",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "72cef821-d4cc-4e20-9220-6653794a3c16",
+    "name": "Get Tour",
+    "url": "{{URL}}/api/v1/tours/62381a1a3635e2a890976cf8",
+    "method": "GET",
+    "sortNum": 50000,
+    "created": "2022-06-22T18:31:53.181Z",
+    "modified": "2022-06-22T18:31:53.181Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"amin\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "1ded1cbb-2308-4158-9dcd-1429b620a525",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "72cef821-d4cc-4e20-9220-6653794a3c16",
+    "name": "Update Tour",
+    "url": "{{URL}}/api/v1/tours/61e77f094e8707fb0daf3fe8",
+    "method": "PATCH",
+    "sortNum": 60000,
+    "created": "2022-06-22T18:31:53.182Z",
+    "modified": "2022-06-22T18:31:53.182Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"name\": \"short\",\n    \"difficulty\": \"whatever\",\n    \"ratingAverage\": 6\n}",
+      "form": []
+    },
+    "tests": [],
+    "docs": "Bargam!"
+  },
+  {
+    "_id": "7d97a67a-6f29-4100-b8cf-b0fea9194e72",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "3cfc17dc-ee40-4c80-b495-0964403636fc",
+    "name": "Login User",
+    "url": "{{URL}}/api/v1/users/login",
+    "method": "POST",
+    "sortNum": 65000,
+    "created": "2022-06-22T18:31:53.183Z",
+    "modified": "2022-06-22T18:39:20.311Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"email\" : \"user@gmail.com\",\n    \"password\": \"pass1234\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "d255e50d-18d2-4d51-8be3-7e2a27fec307",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "72cef821-d4cc-4e20-9220-6653794a3c16",
+    "name": "Delete Tour",
+    "url": "{{URL}}/api/v1/tours/62381a1a3635e2a890976cf8",
+    "method": "DELETE",
+    "sortNum": 70000,
+    "created": "2022-06-22T18:31:53.184Z",
+    "modified": "2022-06-22T18:31:53.184Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "e03560a9-9ec4-4cba-9e9e-5390e0278ec4",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "72cef821-d4cc-4e20-9220-6653794a3c16",
+    "name": "Get top 5 cheap",
+    "url": "{{URL}}/api/v1/tours/top-5-cheap",
+    "method": "GET",
+    "sortNum": 80000,
+    "created": "2022-06-22T18:31:53.185Z",
+    "modified": "2022-06-22T18:31:53.185Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "5a296a7d-bdf2-46a8-a43b-4bfb960db158",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "72cef821-d4cc-4e20-9220-6653794a3c16",
+    "name": "Tour stats",
+    "url": "{{URL}}/api/v1/tours/tour-stats",
+    "method": "GET",
+    "sortNum": 90000,
+    "created": "2022-06-22T18:31:53.186Z",
+    "modified": "2022-06-22T18:31:53.186Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "e9833885-79b7-4d98-a8c8-e0f8f877b0e1",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "72cef821-d4cc-4e20-9220-6653794a3c16",
+    "name": "Monthly Plan of the given year",
+    "url": "{{URL}}/api/v1/tours/monthly-plan/2021",
+    "method": "GET",
+    "sortNum": 100000,
+    "created": "2022-06-22T18:31:53.188Z",
+    "modified": "2022-06-22T18:31:53.188Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "2e911d27-1ec1-4f41-902f-3c11439d857a",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "3cfc17dc-ee40-4c80-b495-0964403636fc",
+    "name": "Signup User",
+    "url": "localhost:3000/api/v1/users/signup",
+    "method": "POST",
+    "sortNum": 110000,
+    "created": "2022-06-22T18:31:53.189Z",
+    "modified": "2022-06-22T18:31:53.189Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\": \"Amin Khoshzahmat\",\n  \"email\": \"user@gmail.com\",\n  \"password\": \"pass1234\",\n  \"passwordConfirm\": \"pass1234\",\n  \"role\": \"user\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "d00003ce-3c97-492b-8163-e2b59e89b9fe",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "3cfc17dc-ee40-4c80-b495-0964403636fc",
+    "name": "User Forgot Password",
+    "url": "{{URL}}/api/v1/users/forgot-password",
+    "method": "POST",
+    "sortNum": 120000,
+    "created": "2022-06-22T18:33:28.742Z",
+    "modified": "2022-06-22T18:43:33.985Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n    \"email\": \"user@gmail.com\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "14337c1c-a34e-4065-aacf-fe090f33b3f1",
+    "colId": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "containerId": "3cfc17dc-ee40-4c80-b495-0964403636fc",
+    "name": "User Reset Password",
+    "url": "{{URL}}/api/v1/users/reset-password/sdfsdf",
+    "method": "PATCH",
+    "sortNum": 130000,
+    "created": "2022-06-22T19:57:59.571Z",
+    "modified": "2022-06-22T19:58:28.757Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  }
+]

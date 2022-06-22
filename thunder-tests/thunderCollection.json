@@ -1,0 +1,29 @@
+[
+  {
+    "_id": "f275f143-1cde-401d-a87f-0a84bd216bdc",
+    "colName": "Natours",
+    "created": "2022-06-22T18:31:53.169Z",
+    "sortNum": 10000,
+    "folders": [
+      {
+        "_id": "3cfc17dc-ee40-4c80-b495-0964403636fc",
+        "name": "Users",
+        "containerId": "",
+        "created": "2022-06-22T18:31:53.170Z",
+        "sortNum": 10000
+      },
+      {
+        "_id": "72cef821-d4cc-4e20-9220-6653794a3c16",
+        "name": "Tours",
+        "containerId": "",
+        "created": "2022-06-22T18:31:53.171Z",
+        "sortNum": 20000
+      }
+    ],
+    "settings": {
+      "headers": [],
+      "tests": [],
+      "envId": "d61fa65a-16f1-425d-a84a-f3dc6500a7a1"
+    }
+  }
+]
