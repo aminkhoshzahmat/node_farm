@@ -111,3 +111,22 @@ exports.restrictTo =
     }
     next();
   };
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) Get user based on Posted email >  findOne (single), not find (collection)
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user email address', 404));
+  }
+
+  console.log(user);
+
+  // 2) Generate the random reset token
+  const resetToken = user.createPasswordResetToken();
+  await user.save({ validateBeforeSave: false });
+
+  // 3) Send it to user's email
+  next();
+});
+
+exports.resetPassword = (req, res, next) => {};
